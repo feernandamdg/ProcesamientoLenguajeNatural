@@ -395,13 +395,13 @@ def main():
     opc = input("Selecciona una opción:")
     
     if opc == "1":
-        file_path = "textoA.txt"
+        file_path = "lematizacion/textoA.txt"
     if opc == "2":
-        file_path = "textoB.txt"
+        file_path = "lematizacion/textoB.txt"
     if opc == "3":
-        file_path = "textoC.txt"
+        file_path = "lematizacio/textoC.txt"
     if opc == "4":
-        file_path = "textoD.txt"
+        file_path = "lematizacion/textoD.txt"
     
     with open(file_path, 'r',encoding='utf-8') as file:
         texto = file.read()
