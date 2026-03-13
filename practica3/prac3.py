@@ -147,7 +147,7 @@ def main():
     
 FILE_INFO = [
     {"topic":"literary",
-    "file_location": "literary_text.pdf",
+    "file_location": "practica3/literary_text.pdf",
     "stop_words" : [
         "had", "was", "seemed", "while", "then",
         "later", "that", "that_one", "where", "when",
@@ -156,7 +156,7 @@ FILE_INFO = [
     ]},
 
     {"topic":"mathematical",
-    "file_location": "mathematical_text.pdf",
+    "file_location": "practica3/mathematical_text.pdf",
     "stop_words" : [
         "let", "given", "exists", "where", "then",
         "suppose", "such", "that", "satisfies", "always",
@@ -165,7 +165,7 @@ FILE_INFO = [
     ]},
 
     {"topic":"medical",
-    "file_location": "medical_text.pdf",
+    "file_location": "practica3/medical_text.pdf",
     "stop_words" : [
         "denied", "presents", "clinical", "diagnosis", "treatment",
         "observed", "frequency", "associated", "chronic", "acute",
@@ -174,7 +174,7 @@ FILE_INFO = [
     ]},
 
     {"topic":"biological",
-    "file_location": "biological_text.pdf",
+    "file_location": "practica3/biological_text.pdf",
     "stop_words" : [
         "structure", "function", "system", "process", "activity",
         "level", "type", "development", "formation", "component",
@@ -183,7 +183,7 @@ FILE_INFO = [
     ]},
 
     {"topic":"musical",
-    "file_location": "musical_text.pdf",
+    "file_location": "practica3/musical_text.pdf",
     "stop_words" : [
         "work", "piece", "performance", "style", "form",
         "sound", "section", "part", "structure", "passage",
@@ -192,7 +192,7 @@ FILE_INFO = [
     ]},
 
     {"topic":"computational",
-    "file_location": "computational_text.pdf",
+    "file_location": "practica3/computational_text.pdf",
     "stop_words" : [
         "system", "process", "method", "structure", "component",
         "function", "element", "operation", "result", "input",
