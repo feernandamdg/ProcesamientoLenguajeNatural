@@ -1,0 +1,6 @@
+nltk
+pandas
+ipykernel
+
+#Practica 2
+pypdf
