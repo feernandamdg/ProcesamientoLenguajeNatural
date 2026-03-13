@@ -43,7 +43,7 @@ def tokenizador(texto):
 
   return tokens
 
-def A_mayusculas(texto):
+def A_minuscula(texto):
     letras = ""
     
     for letra in texto:
@@ -100,26 +100,23 @@ def best_wup_similarity(word1, word2):
 
     return max_score
 
-def get_similarity_score(text_list, word_to_compare):
-    total_score = 0
-    valid_comparisons = 0
-    max_word = ""
-    score_max = 0
+def get_similarity_score(text_list, word_to_compare, k=5):
+    scores = []
 
     for word in text_list:
         score = best_wup_similarity(word, word_to_compare)
         if score > 0:
-            if score > score_max:
-                max_word = word
-                score_max = score
-            total_score += score
-            valid_comparisons += 1
+            scores.append(score)
 
-    if valid_comparisons == 0:
+    if not scores:
         return 0
 
-    print(max_word, total_score/valid_comparisons,"\n")    
-    return total_score/valid_comparisons
+    scores.sort(reverse=True)
+    top_k_scores = scores[:k]
+    avg_score = sum(top_k_scores) / len(top_k_scores)
+    print(f"Promedio Top {len(top_k_scores)}: {avg_score:.4f}")
+    
+    return avg_score
 
 def main():
     nltk.download('wordnet')
@@ -131,7 +128,7 @@ def main():
         
     for item in FILE_INFO:   
         texto = extract_text_from_pdf(item["file_location"])
-        minusc_text = A_mayusculas(texto)
+        minusc_text = A_minuscula(texto)
         tokenized_text = tokenizador(minusc_text)
         compressed_text_list = removedor_stop_words(tokenized_text,item["stop_words"])
         print(compressed_text_list)

@@ -43,7 +43,7 @@ def tokenizador(texto):
 
   return tokens
 
-def A_mayusculas(texto):
+def A_minusculas(texto):
     letras = ""
     
     for letra in texto:
@@ -118,9 +118,6 @@ def get_similarity_score(text_list, word_to_compare, k=5):
     
     return avg_score
 
-    print(max_word, total_score/valid_comparisons,"\n")    
-    return total_score/valid_comparisons
-
 def main():
     nltk.download('wordnet')
     nltk.download('omw-1.4')
@@ -131,7 +128,7 @@ def main():
         
     for item in FILE_INFO:   
         texto = extract_text_from_pdf(item["file_location"])
-        minusc_text = A_mayusculas(texto)
+        minusc_text = A_minusculas(texto)
         tokenized_text = tokenizador(minusc_text)
         compressed_text_list = removedor_stop_words(tokenized_text,item["stop_words"])
         print(compressed_text_list)
