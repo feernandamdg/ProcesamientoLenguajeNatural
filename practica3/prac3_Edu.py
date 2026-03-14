@@ -133,7 +133,7 @@ def main():
         compressed_text_list = removedor_stop_words(tokenized_text,item["stop_words"])
         print(compressed_text_list)
         print(item["topic"])
-        score = get_similarity_score(compressed_text_list, word_to_compare, k=5)
+        score = get_similarity_score(compressed_text_list, word_to_compare, k=10)
         if score > max_score:
             max_score = score
             max_topic = item["topic"]

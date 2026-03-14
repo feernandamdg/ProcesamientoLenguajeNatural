@@ -407,7 +407,7 @@ def main():
         texto = file.read()
     
     print("Conteo del texto:", count_words(texto))
-    minusc_text = A_mayusculas(texto)S
+    minusc_text = A_mayusculas(texto)
     print("Conteo después de quitar mayúsculas:", count_words(minusc_text))
     tokenized_text = tokenizador(minusc_text)
     print("Conteo tokenizado: ", len(tokenized_text))
