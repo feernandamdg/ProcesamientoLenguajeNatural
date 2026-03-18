@@ -7,7 +7,7 @@ def tokenizador(texto):
     tokens = []
 
     whites = string.whitespace
-    delimitadores = string.whitespace + string.punctuation + "¿¡”“’‘—–[]{}()<>…=+-/*^%|\\,:;\"'"
+    delimitadores = string.whitespace + string.punctuation
     numbers = string.digits
     not_letters = delimitadores + numbers
 
@@ -107,7 +107,10 @@ def get_similarity_score(text_list, word_to_compare, k=5):
 
     scores.sort(reverse=True)
     top_k_scores = scores[:k]
-    avg_score = sum(top_k_scores) / len(top_k_scores)
+    sum_top_scores = 0
+    for item in top_k_scores:
+        sum_top_scores +=item
+    avg_score = sum_top_scores / len(top_k_scores)
 
     return avg_score
 
@@ -116,51 +119,57 @@ FILE_INFO = [
     {
         "ecuacion": "y = mx + b",
         "texto": """
-        La ecuación de la recta representa una relación lineal entre variables.
-        La variable y depende de x. El parámetro m es la pendiente de la recta
-        y b es la intersección con el eje vertical. Esta ecuación se usa en
-        estadística, física e ingeniería para modelar relaciones lineales,
-        crecimiento proporcional, tendencias y comportamiento de datos.
+        Una de las ecuaciones más conocidas es la ecuación de la recta.
+        En esta expresión, la variable y representa la variable dependiente,
+        mientras que x representa la variable independiente. El parámetro m
+        es la pendiente de la recta y describe qué tan inclinada está la línea.
+        El valor b corresponde a la intersección con el eje vertical, es decir,
+        el punto donde la recta cruza el eje y cuando x = 0. Esta ecuación se
+        utiliza ampliamente en estadística, física e ingeniería para modelar
+        relaciones lineales entre variables.
         """,
-        "stop_words": ["variable", "variables", "ecuación", "recta"]
+        "stop_words": ["variable", "variables", "ecuación"]
     },
     {
         "ecuacion": "a² + b² = c²",
         "texto": """
-        El teorema de Pitágoras describe la relación entre los lados de un
-        triángulo rectángulo. Los catetos se representan con a y b, mientras
-        que c es la hipotenusa. Se utiliza en geometría, arquitectura,
-        navegación y cálculo de distancias.
+        Otra ecuación muy conocida es el teorema de Pitágoras, que describe la
+        relación entre los lados de un triángulo rectángulo.
+        En esta ecuación, a y b representan los catetos del triángulo, mientras
+        que c representa la hipotenusa. Si se conocen las longitudes de dos lados
+        es posible calcular la longitud del tercero. Este teorema ha sido utilizado
+        durante más de dos mil años en áreas como la arquitectura, la navegación y
+        la geometría analítica.
         """,
-        "stop_words": ["ecuación", "teorema", "representa"]
+        "stop_words": ["ecuación", "representa"]
     },
     {
         "ecuacion": "f'(x) = lim (h→0) [f(x+h) − f(x)] / h",
         "texto": """
-        La derivada describe la tasa de cambio instantánea de una función.
-        Permite analizar variación, cambio, pendiente, velocidad y comportamiento
-        local. En física, la derivada de la posición respecto al tiempo es la
-        velocidad. En cálculo diferencial se usa para estudiar funciones.
+        En cálculo diferencial aparece otra ecuación importante relacionada con la derivada. 
+        Esta expresión describe la tasa de cambio instantánea de una función. La derivada
+        permite analizar cómo cambia una variable con respecto a otra. Por ejemplo, en
+        física la derivada de la posición respecto al tiempo corresponde a la velocidad.
         """,
         "stop_words": ["ecuación", "función", "representa"]
     },
     {
         "ecuacion": "f(x) = (1 / (σ√(2π))) e^{-(x−μ)² / (2σ²)}",
         "texto": """
-        La distribución normal modela fenómenos aleatorios alrededor de una media.
-        Incluye conceptos como probabilidad, estadística, desviación estándar,
-        media, error de medición, alturas y variables biológicas. Es fundamental
-        en inferencia estadística y análisis de datos.
+        En probabilidad y estadística encontramos la ecuación de la distribución normal.
+        En esta fórmula se representa la media de la distribución y representa la
+        desviación estándar. Esta distribución es fundamental para describir fenómenos 
+        naturales como alturas de personas, errores de medición y muchas variables biológicas.
         """,
         "stop_words": ["ecuación", "función", "modelo"]
     },
     {
         "ecuacion": "E = mc²",
         "texto": """
-        La ecuación de Einstein establece la equivalencia entre masa y energía.
-        Relaciona la masa con la velocidad de la luz y explica fenómenos de la
-        física moderna. Se usa en relatividad, energía nuclear y transformación
-        de materia en energía.
+        Otra ecuación muy conocida en física es la ecuación de energía de Einstein.
+        Esta ecuación establece que la energía es igual a la masa multiplicada
+        por el cuadrado de la velocidad de la luz. Esta relación demuestra que
+        masa y energía son equivalentes y puede transformarse una en otra bajo ciertas condiciones.
         """,
         "stop_words": ["ecuación", "relación", "establece"]
     },
@@ -182,7 +191,7 @@ def main():
     nltk.download('omw-1.4')
 
     palabra_usuario = input("Escribe una palabra relacionada con una ecuación: ")
-    palabra_usuario = a_minusculas(palabra_usuario).strip()
+    palabra_usuario = a_minusculas(palabra_usuario)
 
     max_score = 0
     mejor_ecuacion = ""
