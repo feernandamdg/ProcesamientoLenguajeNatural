@@ -62,7 +62,7 @@ def detectar_instituciones(tokens):
                 flag = False
         if token in patrones:
             flag = True
-            instituciones.append(token)
+            instituciones += [token]
 
     return instituciones
 
@@ -70,7 +70,7 @@ def detectar_telefonos(tokens):
     telefonos = []
     for token in tokens:
         if token.isdigit() and len(token) == 10:
-            telefonos.append(token)
+            telefonos += [token]
     return telefonos
 
 def es_codigo_postal(token):
@@ -90,7 +90,7 @@ def detectar_direcciones(tokens):
             
         if token in patrones:
             flag_direccion = True
-            direcciones.append(token)
+            direcciones += [token]
 
     return direcciones
 
