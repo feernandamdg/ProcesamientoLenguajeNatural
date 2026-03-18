@@ -85,7 +85,6 @@ def detectar_direcciones(tokens):
     patrones = ['Calle', 'Avenida', 'Boulevard', 'Av']
     direcciones = []
     flag_direccion = False
-# Si encontramos codigo postal, ya somo verificamos que las siguientes tres letras no sean Ciudad de México, si no, agregamos eso a la dirección
 
     for token in tokens:
         if flag_direccion:
