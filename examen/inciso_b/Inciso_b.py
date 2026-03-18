@@ -61,8 +61,12 @@ def detectar_instituciones(tokens):
 
     for token in tokens:
         if flag:
-            if token[0].isupper() or token in ['de', 'del', 'la', 'y', 'en']:
-                instituciones[-1] += ' ' + token
+            if ord(token[0]) >= 65 and ord(token[0]) <=90 or token in ['de', 'del', 'la', 'y', 'en']:
+                if token in ['México']:
+                    instituciones[-1] += ' ' + token
+                    flag = False
+                else:
+                    instituciones[-1] += ' ' + token
             else:
                 flag = False
         if token in patrones:
