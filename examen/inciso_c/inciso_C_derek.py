@@ -1,6 +1,10 @@
 import string
 import textwrap
 
+# --- Lematizar : regresar a su raíz ---
+# --- Corpus: Conjunto de documentos ---
+# --- Documento: Conjunto de textos ---
+
 # Texto original de biología
 texto_biologia = """La biología es la ciencia que estudia los seres vivos y los procesos que permiten su funcionamiento, crecimiento y reproducción. Desde organismos microscópicos hasta ecosistemas completos, la biología busca comprender cómo interactúan las diferentes formas de vida y cuáles son los mecanismos que regulan su existencia.
 Una de las unidades fundamentales de la vida es la célula. Todos los organismos vivos están formados por una o más células, y cada célula contiene estructuras especializadas llamadas orgánulos. Entre los orgánulos más importantes se encuentran el núcleo, las mitocondrias, el retículo endoplasmático y el aparato de Golgi.
@@ -13,10 +17,6 @@ Además de los procesos celulares, la biología también estudia la interacción
 Los organismos dentro de un ecosistema pueden ocupar diferentes niveles tróficos. Los productores, como las plantas y las algas, obtienen energía mediante la fotosíntesis. Los consumidores se alimentan de otros organismos, mientras que los descomponedores reciclan materia orgánica y devuelven nutrientes al suelo.
 Otro concepto importante en biología es la evolución. La teoría de la evolución, propuesta por Charles Darwin, establece que las especies cambian a lo largo del tiempo mediante un proceso llamado selección natural. En este proceso, los individuos con características favorables tienen mayor probabilidad de sobrevivir y reproducirse.
 La biología moderna combina conocimientos de genética, bioquímica y biología molecular para comprender los procesos que sustentan la vida. Gracias a estos avances, hoy es posible desarrollar medicamentos, mejorar cultivos agrícolas y estudiar enfermedades a nivel molecular."""
-
-# --- Lematizar : regresar a su raíz ---
-# --- Corpus: Conjunto de documentos ---
-# --- Documento: Conjunto de textos ---
 
 # diccionarios
 lemmas_excepciones = {
@@ -49,14 +49,6 @@ diccionario_ar_gerundio = ["hablando", "cantando", "estudiando", "interactuando"
 diccionario_ir_gerundio = ["viviendo", "escribiendo", "dividiendo", "ocurriendo"]
 diccionario_er_gerundio = ["comiendo", "bebiendo", "comprendiendo", "conteniendo"]
 
-diccionario_ar_preterito = ["hablé", "cantó", "estudió"]
-diccionario_er_preterito = ["comí", "bebió", "comprendió"]
-diccionario_ir_preterito = ["viví", "escribió", "ocurrió"]
-
-diccionario_ar_futuro = ["hablaré", "cantará", "estudiará"]
-diccionario_er_futuro = ["comeré", "beberá", "comprenderá"]
-diccionario_ir_futuro = ["viviré", "escribirá", "ocurrirá"]
-
 diccionario_ar_presente = [
     "estudia", "estudian", "regula", "regulan", "codifica", "codifican", 
     "participa", "participan", "duplica", "duplican", "genera", "generan",
@@ -76,7 +68,6 @@ diccionario_ir_presente = [
     "recibe", "reciben", "produce", "producen"
 ]
 
-# 1. Función A_mayusculas (Sin .lower(), usando ASCII)
 def A_mayusculas(texto):
     result = ""
     for char in texto:
@@ -93,11 +84,9 @@ def A_mayusculas(texto):
             result += char
     return result
 
-# 2. Tokenizador MANUAL (Sin librería RE)
 def tokenizador(texto):
     tokens = []
     token_actual = ""
-    # Definimos qué caracteres separan palabras
     separadores = string.whitespace + string.punctuation + "¿¡"
     
     for char in texto:
@@ -107,14 +96,10 @@ def tokenizador(texto):
             if token_actual != "":
                 tokens.append(token_actual)
                 token_actual = ""
-    
-    # Agregar el último token si quedó algo pendiente
     if token_actual != "":
         tokens.append(token_actual)
-        
     return tokens
 
-# 3. Remover Stop Words
 def removedor_stop_words(tokenized_text):
     stop_words = ["de","la","que","el","en","y","a","los","del","se","las","por","un","para","con","una","su","al","lo","ese","desde","hasta","como","más","cada","entre","este","son","estas","uno","dos","otro","lado","sus","sí"]
     new_text = []
@@ -123,7 +108,6 @@ def removedor_stop_words(tokenized_text):
             new_text.append(item)
     return new_text
 
-# 4. Reglas Gramaticales
 def grammar_rules(word):
     n = len(word)
     if n < 3: return None
@@ -141,14 +125,8 @@ def grammar_rules(word):
     if word[n-1:] == "e" and word in diccionario_ir_presente: return word[:n-1] + "ir"
     if word[n-2:] == "en" and word in diccionario_ir_presente: return word[:n-2] + "ir"
 
-    # --- PASADO y FUTURO ---
-    # (Se mantienen las lógicas de corte previas simplificadas para el ejemplo)
-    if word[n-1:] == "é" and (word in diccionario_ar_preterito or word in diccionario_ar_futuro): return word[:n-1] + "ar"
-    if word[n-1:] == "ó" and word in diccionario_ar_preterito: return word[:n-1] + "ar"
-
     return None
 
-# 5. Lematizador
 def lematizador1(corpus):
     lematized_words = []
     for word in corpus:
@@ -168,7 +146,14 @@ def main():
     compressed_text_list = removedor_stop_words(tokenized_text)
     lematized_list = lematizador1(compressed_text_list)
     
-    final_text = " ".join(lematized_list)
+    # --- SUSTITUCIÓN DE .join() ---
+    final_text = ""
+    for i in range(len(lematized_list)):
+        final_text += lematized_list[i]
+        # Agregamos el espacio solo si NO es la última palabra
+        if i < len(lematized_list) - 1:
+            final_text += " "
+            
     lineas_texto = textwrap.wrap(final_text, width=80)
     
     with open('nlp_resultado_final.txt', 'w', encoding="utf-8") as file:
