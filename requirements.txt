@@ -4,3 +4,5 @@ ipykernel
 
 #Practica 2
 pypdf
+#examen
+unicodedata #A
