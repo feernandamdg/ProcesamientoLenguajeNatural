@@ -1,0 +1,123 @@
+=== Inciso C - Procesamiento de Lenguaje Natural ===
+
+Tokenización   : 519 tokens
+Sin stopwords  : 281 tokens
+Lematización   : 281 tokens
+
+--- 1. Tokens (tokenización) ---
+la biología es la ciencia que estudia los seres vivos y los procesos que
+permiten su funcionamiento crecimiento y reproducción desde organismos
+microscópicos hasta ecosistemas completos la biología busca comprender cómo
+interactúan las diferentes formas de vida y cuáles son los mecanismos que
+regulan su existencia una de las unidades fundamentales de la vida es la célula
+todos los organismos vivos están formados por una o más células y cada célula
+contiene estructuras especializadas llamadas orgánulos entre los orgánulos más
+importantes se encuentran el núcleo las mitocondrias el retículo endoplasmático
+y el aparato de golgi el núcleo celular contiene el adn que es la molécula
+responsable de almacenar la información genética el adn está formado por
+secuencias de nucleótidos que codifican proteínas estas proteínas participan en
+prácticamente todos los procesos biológicos desde la digestión hasta la
+replicación celular uno de los procesos más importantes en biología celular es
+la replicación del adn durante este proceso la molécula de adn se duplica para
+que cada célula hija reciba una copia completa del material genético este
+proceso ocurre antes de la división celular y es esencial para el crecimiento y
+la reparación de tejidos la división celular puede ocurrir mediante dos procesos
+principales mitosis y meiosis la mitosis es el proceso mediante el cual una
+célula se divide para formar dos células hijas genéticamente idénticas este
+proceso es fundamental para el crecimiento de los organismos multicelulares por
+otro lado la meiosis es un tipo especial de división celular que produce células
+reproductivas llamadas gametos durante la meiosis se generan cuatro células
+hijas que contienen la mitad del material genético de la célula original este
+mecanismo permite la diversidad genética en las poblaciones las mitocondrias
+conocidas como las centrales energéticas de la célula participan en la
+producción de atp el atp es una molécula que almacena energía y que es utilizada
+por la célula para realizar diferentes funciones metabólicas este proceso ocurre
+mediante la respiración celular que incluye etapas como la glucólisis el ciclo
+de krebs y la cadena de transporte de electrones además de los procesos
+celulares la biología también estudia la interacción entre organismos y su
+entorno estas interacciones se analizan en el campo de la ecología los
+ecosistemas están formados por comunidades de organismos que interactúan entre
+sí y con factores abióticos como la temperatura el agua y la luz solar los
+organismos dentro de un ecosistema pueden ocupar diferentes niveles tróficos los
+productores como las plantas y las algas obtienen energía mediante la
+fotosíntesis los consumidores se alimentan de otros organismos mientras que los
+descomponedores reciclan materia orgánica y devuelven nutrientes al suelo otro
+concepto importante en biología es la evolución la teoría de la evolución
+propuesta por charles darwin establece que las especies cambian a lo largo del
+tiempo mediante un proceso llamado selección natural en este proceso los
+individuos con características favorables tienen mayor probabilidad de
+sobrevivir y reproducirse la biología moderna combina conocimientos de genética
+bioquímica y biología molecular para comprender los procesos que sustentan la
+vida gracias a estos avances hoy es posible desarrollar medicamentos mejorar
+cultivos agrícolas y estudiar enfermedades a nivel molecular
+
+--- 2. Tokens sin stopwords ---
+biología ciencia estudia seres vivos procesos permiten funcionamiento
+crecimiento reproducción organismos microscópicos ecosistemas completos biología
+busca comprender cómo interactúan diferentes formas vida cuáles mecanismos
+regulan existencia unidades fundamentales vida célula organismos vivos están
+formados células célula contiene estructuras especializadas llamadas orgánulos
+orgánulos importantes encuentran núcleo mitocondrias retículo endoplasmático
+aparato golgi núcleo celular contiene adn molécula responsable almacenar
+información genética adn formado secuencias nucleótidos codifican proteínas
+proteínas participan prácticamente procesos biológicos digestión replicación
+celular uno procesos importantes biología celular replicación adn proceso
+molécula adn duplica célula hija reciba copia completa material genético proceso
+ocurre antes división celular esencial crecimiento reparación tejidos división
+celular puede ocurrir dos procesos principales mitosis meiosis mitosis proceso
+célula divide formar dos células hijas genéticamente idénticas proceso
+fundamental crecimiento organismos multicelulares lado meiosis tipo especial
+división celular produce células reproductivas llamadas gametos meiosis generan
+cuatro células hijas contienen mitad material genético célula original mecanismo
+permite diversidad genética poblaciones mitocondrias conocidas centrales
+energéticas célula participan producción atp atp molécula almacena energía
+utilizada célula realizar diferentes funciones metabólicas proceso ocurre
+respiración celular incluye etapas glucólisis ciclo krebs cadena transporte
+electrones procesos celulares biología estudia interacción organismos entorno
+interacciones analizan campo ecología ecosistemas están formados comunidades
+organismos interactúan sí factores abióticos temperatura agua luz solar
+organismos ecosistema pueden ocupar diferentes niveles tróficos productores
+plantas algas obtienen energía fotosíntesis consumidores alimentan organismos
+mientras descomponedores reciclan materia orgánica devuelven nutrientes suelo
+concepto importante biología evolución teoría evolución propuesta charles darwin
+establece especies cambian largo tiempo proceso llamado selección natural
+proceso individuos características favorables tienen mayor probabilidad
+sobrevivir reproducirse biología moderna combina conocimientos genética
+bioquímica biología molecular comprender procesos sustentan vida gracias avances
+hoy posible desarrollar medicamentos mejorar cultivos agrícolas estudiar
+enfermedades nivel molecular
+
+--- 3. Lemas (lematización) ---
+biología ciencia estudia seres vivos proceso permiten funcionamiento crecimiento
+reproducción organismo microscópicos ecosistemas completos biología busca
+comprender cómo interactúan diferente formas vida cuáles mecanismos regulan
+existencia unidades fundamentales vida célula organismo vivos ser formados
+célula célula contiene estructura especializadas llamadas orgánulos orgánulos
+importante encuentran núcleo mitocondrias retículo endoplasmático aparato golgi
+núcleo celular contiene adn molécula responsable almacenar información genética
+adn formado secuencias nucleótidos codifican proteína proteína participan
+prácticamente proceso biológicos digestión replicación celular uno proceso
+importante biología celular replicación adn proceso molécula adn duplica célula
+hija reciba copia completa material genético proceso ocurre antes división
+celular esencial crecimiento reparación tejido división celular puede ocurrir
+dos proceso principal mitosis meiosis mitosis proceso célula divide formar dos
+célula hijas genéticamente idénticas proceso fundamental crecimiento organismo
+multicelulares lado meiosis tipo especial división celular produce célula
+reproductivas llamadas gametos meiosis generan cuatro célula hijas contienen
+mitad material genético célula original mecanismo permite diversidad genética
+poblaciones mitocondrias conocidas centrales energéticas célula participan
+producción atp atp molécula almacena energía utilizada célula realizar diferente
+función metabólicas proceso ocurre respiración celular incluye etapas glucólisis
+ciclo krebs cadena transporte electrones proceso celulares biología estudia
+interacción organismo entorno interacciones analizan campo ecología ecosistemas
+ser formados comunidades organismo interactúan sí factor abióticos temperatura
+agua luz solar organismo ecosistema pueden ocupar diferente nivel tróficos
+productores plantas algas obtienen energía fotosíntesis consumidores alimentan
+organismo mientras descomponedores reciclan materia orgánica devuelven
+nutrientes suelo concepto importante biología evolución teoría evolución
+propuesta charles darwin establece especies cambian largo tiempo proceso llamado
+selección natural proceso individuos características favorables tener mayor
+probabilidad sobrevivir reproducirse biología moderna combina conocimientos
+genética bioquímica biología molecular comprender proceso sustentan vida gracias
+avances hoy posible desarrollar medicamentos mejorar cultivos agrícolas estudiar
+enfermedades nivel molecular

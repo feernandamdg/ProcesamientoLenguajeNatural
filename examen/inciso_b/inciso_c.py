@@ -5,11 +5,7 @@ Salida  : examen/output_inciso_c.pdf  (se sobreescribe en cada ejecución)
 """
  
 import string
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib import colors
-from reportlab.lib.units import inch
+import textwrap
  
 
 # Diccionarios de lematización (estilo hecho antes)
@@ -175,84 +171,51 @@ def lematizador(tokens): # reutilizado
     return resultado
  
  
-# Guardar en PDF (sobreescribe siempre)
- 
-def guardar_pdf(tokens_orig, tokens_sw, lemas, ruta):
-    doc = SimpleDocTemplate(ruta, pagesize=letter,
-                            rightMargin=inch, leftMargin=inch,
-                            topMargin=inch, bottomMargin=inch)
-    styles = getSampleStyleSheet()
- 
-    estilo_titulo = ParagraphStyle('T', parent=styles['Title'], fontSize=15, spaceAfter=4,
-                                   textColor=colors.HexColor('#1a1a2e'))
-    estilo_sub    = ParagraphStyle('S', parent=styles['Heading2'], fontSize=11, spaceBefore=14,
-                                   spaceAfter=4, textColor=colors.HexColor('#16213e'))
-    estilo_meta   = ParagraphStyle('M', parent=styles['Normal'], fontSize=8,
-                                   textColor=colors.grey, spaceAfter=16)
-    estilo_normal = styles['Normal']
- 
-    story = []
-    story.append(Paragraph("Inciso C — Procesamiento de Lenguaje Natural", estilo_titulo))
-    story.append(Paragraph("Tokenización · Remoción de stopwords · Lematización", estilo_meta))
- 
-    # Tabla resumen
-    stats = [
-        ["Etapa",          "Tokens"],
-        ["Tokenización",   str(len(tokens_orig))],
-        ["Sin stopwords",  str(len(tokens_sw))],
-        ["Lematización",   str(len(lemas))],
-        ["Reducción total",f"{round((1 - len(lemas)/max(len(tokens_orig),1))*100, 1)} %"],
-    ]
-    tabla = Table(stats, colWidths=[3*inch, 1.5*inch])
-    tabla.setStyle(TableStyle([
-        ('BACKGROUND',    (0,0), (-1,0), colors.HexColor('#16213e')),
-        ('TEXTCOLOR',     (0,0), (-1,0), colors.white),
-        ('FONTNAME',      (0,0), (-1,0), 'Helvetica-Bold'),
-        ('FONTSIZE',      (0,0), (-1,-1), 9),
-        ('ROWBACKGROUNDS',(0,1), (-1,-1), [colors.whitesmoke, colors.white]),
-        ('GRID',          (0,0), (-1,-1), 0.4, colors.lightgrey),
-        ('ALIGN',         (1,0), (1,-1), 'CENTER'),
-        ('TOPPADDING',    (0,0), (-1,-1), 5),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 5),
-    ]))
-    story.append(tabla)
- 
-    # Secciones de texto procesado
-    secciones = [
-        ("1. Tokens (tokenización)",  tokens_orig),
-        ("2. Tokens sin stopwords",   tokens_sw),
-        ("3. Lemas (lematización)",   lemas),
-    ]
-    for titulo_sec, lista in secciones:
-        story.append(Spacer(1, 8))
-        story.append(Paragraph(titulo_sec, estilo_sub))
-        story.append(Paragraph(" · ".join(lista), estilo_normal))
- 
-    doc.build(story)
-    print(f"PDF guardado en: {ruta}")
- 
+# Guardar en TXT (sobreescribe siempre)
 
+def guardar_txt(tokens_orig, tokens_sw, lemas, ruta):
+    with open(ruta, 'w', encoding='utf-8') as f:
+        f.write("=== Inciso C - Procesamiento de Lenguaje Natural ===\n\n")
+
+        f.write(f"Tokenización   : {len(tokens_orig)} tokens\n")
+        f.write(f"Sin stopwords  : {len(tokens_sw)} tokens\n")
+        f.write(f"Lematización   : {len(lemas)} tokens\n\n")
+
+        f.write("--- 1. Tokens (tokenización) ---\n")
+        f.write(textwrap.fill(" ".join(tokens_orig), width=80) + "\n\n")
+
+        f.write("--- 2. Tokens sin stopwords ---\n")
+        f.write(textwrap.fill(" ".join(tokens_sw), width=80) + "\n\n")
+
+        f.write("--- 3. Lemas (lematización) ---\n")
+        f.write(textwrap.fill(" ".join(lemas), width=80) + "\n")
+
+    print(f"TXT guardado en: {ruta}")
+
+
+# ─────────────────────────────────────────────
 # Main
+# ─────────────────────────────────────────────
+
 def main():
-   # Ahora
     ruta_entrada = r"examen\inciso_b\biologia.txt"
-    ruta_salida  = r"examen\inciso_b\output_inciso_c.pdf"   # se sobreescribe en cada ejecución
- 
+    ruta_salida  = r"examen\inciso_b\output_inciso_c.txt"  # se sobreescribe en cada ejecución
+
     with open(ruta_entrada, 'r', encoding='utf-8') as f:
         texto = f.read()
- 
+
     print(f"Palabras en texto original : {sum(1 for w in texto.split())}")
- 
+
     texto_minus = a_minusculas(texto)
     tokens      = tokenizador(texto_minus)
     print(f"Tokens tras tokenización   : {len(tokens)}")
- 
+
     tokens_sw   = removedor_stop_words(tokens)
     print(f"Tokens sin stopwords       : {len(tokens_sw)}")
- 
+
     lemas       = lematizador(tokens_sw)
     print(f"Lemas obtenidos            : {len(lemas)}")
- 
-    guardar_pdf(tokens, tokens_sw, lemas, ruta_salida)
- 
+
+    guardar_txt(tokens, tokens_sw, lemas, ruta_salida)
+
 main()
