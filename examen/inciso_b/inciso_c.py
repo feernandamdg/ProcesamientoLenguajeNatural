@@ -234,8 +234,9 @@ def guardar_pdf(tokens_orig, tokens_sw, lemas, ruta):
 
 # Main
 def main():
-    ruta_entrada = r"examen\biologia.txt"
-    ruta_salida  = r"examen\output_inciso_c.pdf"   # se sobreescribe en cada ejecución
+   # Ahora
+    ruta_entrada = r"examen\inciso_b\biologia.txt"
+    ruta_salida  = r"examen\inciso_b\output_inciso_c.pdf"   # se sobreescribe en cada ejecución
  
     with open(ruta_entrada, 'r', encoding='utf-8') as f:
         texto = f.read()
