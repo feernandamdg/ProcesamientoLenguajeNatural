@@ -44,15 +44,6 @@ def tokenizador(texto):
 
   return tokens
 
-def A_minusculas(texto):
-    letras = ""
-    
-    for letra in texto:
-        if ord(letra) >= 65 and ord(letra) <=90:
-            letra = chr(ord(letra) +32)
-        letras += letra
-    return letras
-
 def detectar_instituciones(tokens):
 
     patrones = ['Secretaría', 'Ministerio', 'Instituto', 'Universidad', 'Escuela', 'Facultad', 'Departamento', 'Dirección', 'Agencia', 'Organización', 'Comisión', 'Policía']
@@ -61,8 +52,12 @@ def detectar_instituciones(tokens):
 
     for token in tokens:
         if flag:
-            if token[0].isupper() or token in ['de', 'del', 'la', 'y', 'en']:
-                instituciones[-1] += ' ' + token
+            if ord(token[0]) >= 65 and ord(token[0]) <=90 or token in ['de', 'del', 'la', 'y', 'en']:
+                if token in ['México']:
+                    instituciones[-1] += ' ' + token
+                    flag = False
+                else:
+                    instituciones[-1] += ' ' + token
             else:
                 flag = False
         if token in patrones:
@@ -82,7 +77,7 @@ def es_codigo_postal(token):
     return token.isdigit() and len(token) == 5
 
 def detectar_direcciones(tokens):
-    patrones = ['Calle', 'Avenida', 'Boulevard', 'Av']
+    patrones = ['Calle', 'Avenida', 'Boulevard', 'Av', 'Cerrada']
     direcciones = []
     flag_direccion = False
 

@@ -1,8 +1,17 @@
 import unicodedata
 
+def A_minusculas(texto):
+    letras = ""
+    
+    for letra in texto:
+        if ord(letra) >= 65 and ord(letra) <=90:
+            letra = chr(ord(letra) +32)
+        letras += letra
+    return letras
+
 def normalizar(texto):
     """Convierte a minúsculas y elimina tildes."""
-    texto = texto.lower()
+    texto = A_minusculas(texto)
     texto = ''.join(
         c for c in unicodedata.normalize('NFD', texto)
         if unicodedata.category(c) != 'Mn'
