@@ -12,7 +12,7 @@ El núcleo celular contiene el ADN, que es la molécula responsable de almacenar
 Uno de los procesos más importantes en biología celular es la replicación del ADN. Durante este proceso, la molécula de ADN se duplica para que cada célula hija reciba una copia completa del material genético. Este proceso ocurre antes de la división celular y es esencial para el crecimiento y la reparación de tejidos.
 La división celular puede ocurrir mediante dos procesos principales: mitosis y meiosis. La mitosis es el proceso mediante el cual una célula se divide para formar dos células hijas genéticamente idénticas. Este proceso es fundamental para el crecimiento de los organismos multicelulares.
 Por otro lado, la meiosis es un tipo especial de división celular que produce células reproductivas llamadas gametos. Durante la meiosis se generan cuatro células hijas que contienen la mitad del material genético de la célula original. Este mecanismo permite la diversidad genética en las poblaciones.
-Las mitocondrias, conocidas como las centrales energéticas de la célula, participan en la producción de ATP. El ATP es una molécula que almacena energía y que es utilizada por la célula para realizar diferentes funciones metabólicas. Este proceso ocurre mediante la respiración celular, que incluye etapas como la glucólisis, el ciclo de Krebs y la cadena de transporte de electrones.
+Las mitocondrias, conocidas como las centrales energéticas de la célula, participan en la producción de ATP. El ATP es una molécula que almacena energía y que es utilizada por la célula para realizar differentes funciones metabólicas. Este proceso ocurre mediante la respiración celular, que incluye etapas como la glucólisis, el ciclo de Krebs y la cadena de transporte de electrones.
 Además de los procesos celulares, la biología también estudia la interacción entre organismos y su entorno. Estas interacciones se analizan en el campo de la ecología. Los ecosistemas están formados por comunidades de organismos que interactúan entre sí y con factores abióticos como la temperatura, el agua y la luz solar.
 Los organismos dentro de un ecosistema pueden ocupar diferentes niveles tróficos. Los productores, como las plantas y las algas, obtienen energía mediante la fotosíntesis. Los consumidores se alimentan de otros organismos, mientras que los descomponedores reciclan materia orgánica y devuelven nutrientes al suelo.
 Otro concepto importante en biología es la evolución. La teoría de la evolución, propuesta por Charles Darwin, establece que las especies cambian a lo largo del tiempo mediante un proceso llamado selección natural. En este proceso, los individuos con características favorables tienen mayor probabilidad de sobrevivir y reproducirse.
@@ -94,10 +94,11 @@ def tokenizador(texto):
             token_actual += char
         else:
             if token_actual != "":
-                tokens.append(token_actual)
+                # Sustitución de append: concatenación de listas
+                tokens = tokens + [token_actual]
                 token_actual = ""
     if token_actual != "":
-        tokens.append(token_actual)
+        tokens = tokens + [token_actual]
     return tokens
 
 def removedor_stop_words(tokenized_text):
@@ -105,7 +106,8 @@ def removedor_stop_words(tokenized_text):
     new_text = []
     for item in tokenized_text:
         if item not in stop_words:
-            new_text.append(item)
+            # Sustitución de append: concatenación de listas
+            new_text = new_text + [item]
     return new_text
 
 def grammar_rules(word):
@@ -135,7 +137,7 @@ def lematizador1(corpus):
             lematized_word = lemmas_excepciones[word]
         elif lematized_word == None and word not in lemmas_excepciones:
             lematized_word = word
-        lematized_words.append(lematized_word)
+        lematized_words = lematized_words + [lematized_word]
     return lematized_words
 
 def main():
@@ -146,7 +148,6 @@ def main():
     compressed_text_list = removedor_stop_words(tokenized_text)
     lematized_list = lematizador1(compressed_text_list)
     
-    # --- SUSTITUCIÓN DE .join() ---
     final_text = ""
     for i in range(len(lematized_list)):
         final_text += lematized_list[i]
