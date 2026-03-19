@@ -156,7 +156,7 @@ FILE_INFO = [
     {
         "ecuacion": "f(x) = (1 / (σ√(2π))) e^{-(x−μ)² / (2σ²)}",
         "texto": """
-        En probabilidad y estadística encontramos la ecuación de la distribución normal.
+        Probabilidad: En probabilidad y estadística encontramos la ecuación de la distribución normal.
         En esta fórmula se representa la media de la distribución y representa la
         desviación estándar. Esta distribución es fundamental para describir fenómenos 
         naturales como alturas de personas, errores de medición y muchas variables biológicas.
