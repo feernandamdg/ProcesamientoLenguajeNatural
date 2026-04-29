@@ -1,0 +1,17 @@
+Las matemáticas son una disciplina que estudia los números, las cantidades y las relaciones entre distintos valores. Se apoyan en el uso de símbolos, operaciones y reglas para representar y resolver problemas. Desde operaciones básicas hasta conceptos más avanzados, las matemáticas permiten describir situaciones de manera clara y ordenada, facilitando el análisis de información y la toma de decisiones.
+
+En la aritmética se trabajan las operaciones fundamentales: suma, resta, multiplicación y división. Estas operaciones permiten manipular números y resolver cálculos cotidianos. Por ejemplo, sumar cantidades, repartir elementos o calcular proporciones son actividades comunes que dependen de estas bases. Los números pueden ser enteros, como 1, 2 o 3, o decimales, como 2.5 o 7.8, lo que amplía las posibilidades de representación.
+
+El álgebra introduce el uso de letras para representar valores desconocidos. Estas letras, llamadas variables, permiten plantear ecuaciones que describen relaciones entre cantidades. Una ecuación sencilla puede expresar una igualdad donde se busca encontrar el valor de una variable.
+
+Por ejemplo, una expresión permite encontrar el valor de x mediante operaciones básicas. Este tipo de razonamiento ayuda a resolver problemas donde no se conoce directamente una cantidad.
+
+La geometría se enfoca en las formas y figuras. Se estudian elementos como líneas, triángulos, cuadrados y círculos, así como sus propiedades. A través de la geometría es posible calcular medidas como perímetros y áreas, lo cual resulta útil en situaciones prácticas, como medir espacios o diseñar estructuras.
+
+Las fracciones representan partes de un todo. Se expresan como una división entre dos números, donde el numerador indica cuántas partes se toman y el denominador en cuántas partes se divide el total. Las fracciones permiten trabajar con cantidades que no son enteras, como la mitad o un cuarto, y son comunes en contextos como la cocina o la medición.
+
+La probabilidad introduce la idea de posibilidad. Se utiliza para estimar qué tan probable es que ocurra un evento, como obtener un número específico al lanzar un dado o elegir un elemento al azar. Este concepto ayuda a entender situaciones donde hay incertidumbre y a tomar decisiones basadas en posibilidades.
+
+Las matemáticas también incluyen el uso de gráficas para representar información. A través de ejes y puntos, es posible visualizar datos y relaciones entre variables. Esto facilita la interpretación de resultados y permite identificar patrones o tendencias de manera más sencilla.
+
+En conjunto, las matemáticas proporcionan herramientas básicas y prácticas para trabajar con números, formas y relaciones. Su uso cotidiano se refleja en actividades simples como contar, medir, comparar o resolver problemas, lo que las convierte en una parte fundamental del pensamiento lógico y estructurado.
