@@ -6,3 +6,5 @@ ipykernel
 pypdf
 #examen
 unicodedata #A
+pandas
+numpy
