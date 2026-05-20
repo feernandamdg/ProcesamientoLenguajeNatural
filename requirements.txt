@@ -8,3 +8,5 @@ pypdf
 unicodedata #A
 pandas
 numpy
+
+ipynb # para reciclar funciones de practicas anteriores
