@@ -3,10 +3,6 @@ import tensorflow as tf
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
 
-# ======================================================
-# B) PREDICCIÓN DE LA SIGUIENTE PALABRA CON N-GRAMAS
-# ======================================================
-
 texto = """
 La inteligencia artificial es una disciplina que busca crear sistemas capaces de aprender
 y adaptarse a diferentes entornos. En los últimos años, el desarrollo de modelos de lenguaje
@@ -47,66 +43,55 @@ for i, w in enumerate(vocab):
 vocab_size = len(vocab)
 
 # ============================
-# 2. N-GRAMAS
+# 2. CO-OCURRENCIA + PCA
 # ============================
 
-n = 3
+def construir_concurrencia(vocab, doc_tokenizado, palabra_a_idx, ventana=2):
+    n_vocab = len(vocab)
+    matriz_conc = np.zeros((n_vocab, n_vocab)) #matriz de nxn 
 
-X = [] 
-y = [] 
+    i = 0
+    while i < len(doc_tokenizado):
+        palabra_actual = doc_tokenizado[i]
+        if palabra_actual not in palabra_a_idx:
+            i += 1
+            continue
+        idx_actual = palabra_a_idx[palabra_actual]
 
-for i in range(len(tokens) - n + 1):
-    contexto = tokens[i:i+n-1] # los dos primeros tokens son el contexto
-    target = tokens[i+n-1] # el tercer token es la palabra a predecir
+        inicio = i - ventana
+        if inicio < 0:
+            inicio = 0
+        fin = i + ventana + 1
+        if fin > len(doc_tokenizado):
+            fin = len(doc_tokenizado)
 
-    fila = []
-    for w in contexto: # palabra en contexto
-        fila.append(word2idx[w])
+        j = inicio
+        while j < fin:
+            if j != i:
+                vecino = doc_tokenizado[j]
+                if vecino in palabra_a_idx:
+                    idx_vecino = palabra_a_idx[vecino]
+                    matriz_conc[idx_actual][idx_vecino] += 1
+            j += 1
 
-    X.append(fila)
-    y.append(word2idx[target])
+        i += 1
 
-X = np.array(X) 
-y = np.array(y) 
+    return matriz_conc
 
-# ============================
-# 3. TF-IDF + PCA
-# ============================
+matriz_conc = construir_concurrencia(vocab, tokens, word2idx, ventana=2)
+print("Forma de la matriz de co-ocurrencia:", matriz_conc.shape)
 
-X_texto = []
-
-for fila in X:
-    palabras_contexto = []
-
-    for idx in fila:
-        palabras_contexto.append(idx2word[idx])
-
-    contexto_texto = " ".join(palabras_contexto)
-    X_texto.append(contexto_texto)
-
-print("Contextos en texto:")
-print(X_texto)
-
-# Convertir los contextos a matriz TF-IDF
-vectorizador = TfidfVectorizer()
-X_tfidf = vectorizador.fit_transform(X_texto)
-
-print("Forma TF-IDF:", X_tfidf.shape)
-
-# PCA requiere matriz densa
-X_tfidf_dense = X_tfidf.toarray()
-
-# Número de componentes reducido
-max_componentes = min(X_tfidf_dense.shape[0], X_tfidf_dense.shape[1])
+# PCA para reducir dimensionalidad
+max_componentes = min(matriz_conc.shape[0], matriz_conc.shape[1])
 n_componentes = min(20, max_componentes)
 
 pca = PCA(n_components=n_componentes, random_state=42)
-X_pca = pca.fit_transform(X_tfidf_dense)
+X_pca = pca.fit_transform(matriz_conc)
 
 print("Forma después de PCA:", X_pca.shape)
 
 # ============================
-# 4. RED NEURONAL SIMPLE
+# 3. RED NEURONAL SIMPLE
 # ============================
 
 input_size = X_pca.shape[1]
@@ -128,16 +113,18 @@ def forward(X):
 loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
 # ============================
-# 5. ENTRENAMIENTO
+# 4. ENTRENAMIENTO
 # ============================
 
-optimizer = tf.optimizers.Adam(learning_rate=0.01)
+optimizer = tf.optimizers.Adam(learning_rate=0.001)
 
 loss_history = []
-epochs = 200
+epochs = 400
 
+# X: cada palabra representada por su vector PCA
+# y: el índice de la misma palabra (la red aprende a recuperar cada palabra desde su representación)
 X_tensor = X_pca.astype(np.float32)
-y_tensor = y.astype(np.int32)
+y_tensor = np.arange(vocab_size, dtype=np.int32)
 
 for epoch in range(epochs):
 
@@ -153,35 +140,36 @@ for epoch in range(epochs):
     if epoch % 20 == 0:
         print("Epoch:", epoch, "Loss:", float(loss.numpy()))
 
-
 # ============================
-# 6. PREDICCIÓN
+# 5. PREDICCIÓN
 # ============================
 
 def predecir_siguiente(frase):
     frase = frase.lower().replace("\n", " ")
     palabras = frase.split()
 
-    contexto = palabras[-(n-1):]
+    # Sumar los vectores PCA de cada palabra de la frase
+    vector_contexto = np.zeros(n_componentes)
 
-    if len(contexto) < n - 1:
-        return "Faltan palabras para formar el contexto."
+    for w in palabras:
+        if w not in word2idx:
+            return f"La palabra '{w}' no está en el vocabulario."
+        vector_contexto += X_pca[word2idx[w]]
 
-    contexto_texto = " ".join(contexto)
-
-    X_nuevo_tfidf = vectorizador.transform([contexto_texto])
-    X_nuevo_pca = pca.transform(X_nuevo_tfidf.toarray())
-
-    X_nuevo_tensor = X_nuevo_pca.astype(np.float32)
+    X_nuevo_tensor = vector_contexto.reshape(1, -1).astype(np.float32)
 
     logits = forward(X_nuevo_tensor)
     probs = tf.nn.softmax(logits).numpy()[0]
 
-    pred_idx = np.argmax(probs)
+    # Excluir las palabras de la frase para no repetirlas
+    for w in palabras:
+        if w in word2idx:
+            probs[word2idx[w]] = 0
 
+    pred_idx = np.argmax(probs)
     return idx2word[pred_idx]
 
 
-print(predecir_siguiente("la inteligencia"))
-print(predecir_siguiente("modelos de"))
-print(predecir_siguiente("redes neuronales"))
+print(predecir_siguiente( "inteligencia"))
+print(predecir_siguiente("modelos"))
+print(predecir_siguiente("redes"))
