@@ -1,0 +1,22 @@
+Bag of words
+-> Es una variante de TF-IDF, cuenta frecuencia de palabras y puede vectorizar documentos también.
+
+Parte de contabilizar la caantidad de veces que se repite una palabra en cada documento.
+
+Ejemplo:
+Doc1: Ian está ligando afuera.
+Doc2: Ian tiene esperanza cuando está ligando.
+Doc3: Ian debería estudiar afuera.
+
+vec_pal_unicas = Ian, está, ligando, afuera, tiene esperanza, cuando, debería, estudiar
+Doc1 = [1,1,1,1,0,0,0,0,0]
+Doc2 = [1,1,1,0,1,1,1,0,0]
+Doc3 = [1,0,0,1,0,0,0,1,1]
+
+Embeddings
+Es un vector denso(ocupa varios valores reales de -infinito a + infinito) de dimensiones reconocidas.
+
+Para crear el embedding necesitamos:
+	1. Vectorizar
+	2. Reducir dimensión con PCA o TSNe
+	3. Afinar los vectores (acercar los vectores que en inicio están separados, pero que bajo el 	   contexto del análisis son similares).

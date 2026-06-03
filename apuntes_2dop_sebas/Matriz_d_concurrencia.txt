@@ -1,0 +1,20 @@
+Matriz de concurrencia
+Captura las repeticion de aparición de parejas de palabras.
+
+La salida es una matriz simétrica.
+
+doc = "Keyla no alcanza pizarrón. Keyla gusta paletas".
+
+		Keyla	no	alcanza pizarrón	gusta	paletas
+
+keyla		0	1	0	1		1	0
+
+no		1	0	1	0		0	0
+
+alcanza		0	1	0	1		0	0
+
+pizarrón	1	0	1	0		0	0
+
+gusta		1	0	0	0		0	1
+
+paletas		0	0	0	0		1	0

@@ -1,0 +1,33 @@
+Aplicación en Bruto de Bag of Words
+
+-> SUponga que se tiene la sig. representaicón de Bow por documento
+
+Madariaga = [2,1,1]
+va = [0,1,0]
+reprobar = [3,1,1]
+No = [0,0,2]
+estudiar = [3,1,2]
+
+^----------------------Doc 1
+
+Regina = [1,0,2]
+está = [1,1,1]
+cronometrando = [1,0,1]
+tiempo = [3,1,1]
+^----------------------Doc 2 Clase 1
+
+Se les puede asignar a cada documento una clase como 1 ó 0.
+
+Al estar ya etiquetados, estos datos se pueden meter a un modelo, como puede ser Naive-Bayes, Redes Neuronales, MSV. etc.
+
+
+De tal manera que si un nuevo documento se introduce después de entrenamiento el modelo nos arroje a cuál se asemeja más.
+
+
+--- Clase 1
+Ejemplo.
+Doc_Test = "Cuando Madariaga está cronometrando el tiempo es por correr"
+---
+
+Este documento de ejemplo, lo paso por el bag of words para que me de la lista de ocurrencias.
+DEspués lo envío al modelo ya entrenado que se encargaá de hacer la clasificación.
