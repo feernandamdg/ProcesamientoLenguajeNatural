@@ -21,6 +21,7 @@ Uno de los mayores desafíos en la creación de corpus lingüísticos es la nece
 # ============================
 
 tokens = preprocesar_texto(texto)
+print (f" cantidad deTokens ({len(tokens)}):")
 
 vocab = sorted(set(tokens))
 
