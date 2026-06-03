@@ -35,7 +35,7 @@ print(f"Vocabulario ({vocab_size} palabras):")
 # 2. N-GRAMAS
 # ============================
 
-n = 2
+n = 4
 
 X = []
 y = []
