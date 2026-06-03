@@ -1,50 +1,40 @@
 import numpy as np
 import tensorflow as tf
 from sklearn.feature_extraction.text import TfidfVectorizer
+from funcion_preprocesamiento import preprocesar_texto
 
+# texto de 509 palabras
 texto = """
-La inteligencia artificial es una disciplina que busca crear sistemas capaces de aprender
-y adaptarse a diferentes entornos. En los últimos años, el desarrollo de modelos de lenguaje
-ha permitido avances significativos en la comprensión del texto. Estos modelos utilizan
-grandes cantidades de datos para identificar patrones y generar resultados coherentes.
-
-El uso de ngramas es una técnica clásica en procesamiento de lenguaje natural que permite
-analizar secuencias de palabras. Un modelo basado en ngramas considera un conjunto de palabras
-previas para predecir la siguiente palabra en una oración. Aunque es un enfoque simple, puede
-ser muy efectivo cuando se combina con redes neuronales.
-
-Las redes neuronales permiten modelar relaciones complejas entre los datos. En el contexto
-del lenguaje, pueden capturar dependencias semánticas y sintácticas. Esto es especialmente útil
-cuando se trabaja con textos largos o con estructuras gramaticales complejas.
-
-Entrenar un modelo de predicción de palabras implica optimizar los pesos de la red para minimizar
-el error entre las predicciones y las palabras reales. Este proceso se realiza mediante algoritmos
-de optimización como el descenso de gradiente. Al final, el modelo es capaz de generar texto o
-sugerir palabras basadas en el contexto previo.
+El PLN es una rama de la inteligencia artificial que se ocupa de la interacción entre computadoras y humanos utilizando el lenguaje natural. Los corpus lingüísticos son esenciales en este campo, ya que proporcionan los datos necesarios para que las máquinas aprendan y entiendan el lenguaje. Un corpus lingüístico en IA no es más que una base de datos estructurada que contiene ejemplos reales del uso del lenguaje, cuidadosamente recopilados y organizados para su análisis y procesamiento automáticos.
+Los corpus son fundamentales para entrenar algoritmos de aprendizaje automático, desarrollar modelos de lenguaje y mejorar la precisión de las aplicaciones de PLN como los chatbots, los asistentes virtuales y los sistemas de traducción automática.
+La creación de un corpus lingüístico es un proceso meticuloso que requiere una planificación cuidadosa y una ejecución precisa. Los lingüistas y los ingenieros de datos trabajan juntos para definir la metodología, recopilar textos, y llevar a cabo la anotación de corpus, que es el proceso de agregar información lingüística relevante a los textos. Esta anotación puede incluir aspectos como la estructura gramatical, el significado de las palabras y las entidades nombradas, lo que es crucial para el tratamiento automático del lenguaje.
+La anotación de corpus se realiza normalmente a través de herramientas especializadas que permiten etiquetar grandes volúmenes de texto con precisión y coherencia. Este proceso es esencial para la generación de datos anotados que los sistemas de IA pueden utilizar para aprender y mejorar su comprensión del lenguaje.
+Los corpus lingüísticos tienen una amplia gama de aplicaciones en el mundo de la inteligencia artificial. En el análisis semántico y pragmático, ayudan a las máquinas a comprender el significado y la intención detrás de las palabras. En los sistemas de conversación, permiten a los chatbots responder de manera coherente y natural a las preguntas de los usuarios. En la traducción automática, los corpus bilingües o multilingües facilitan la creación de sistemas capaces de traducir con precisión entre idiomas.
+Un ejemplo notable de la aplicación práctica de los corpus lingüísticos es el proyecto colaborativo entre la Fundación Comillas y LIS Data Solutions. Juntos están creando el primer corpus lingüístico del español de los negocios, un recurso que mejorará significativamente la comunicación empresarial en aplicaciones de IA y en la enseñanza del Español de los Negocios.
+Los corpus especializados, como el mencionado corpus del español de los negocios, son fundamentales para abordar necesidades específicas en el campo del PLN. Permiten el desarrollo de aplicaciones de IA con un alto grado de especialización, lo que se traduce en sistemas más precisos y eficaces en sus respectivos dominios.
+Los avances recientes en IA y PLN han sido impulsados en gran medida por la disponibilidad de grandes corpus anotados y modelos de lenguaje sofisticados. Estos modelos, entrenados con corpus especializados, están alcanzando niveles de comprensión del lenguaje que eran impensables hace apenas unos años.
+Uno de los mayores desafíos en la creación de corpus lingüísticos es la necesidad de recursos multilingües. En un mundo cada vez más globalizado, es esencial que las aplicaciones de IA puedan funcionar en múltiples idiomas. 
 """
+
 # ============================
 # 1. PREPROCESAMIENTO
 # ============================
 
-texto = texto.lower().replace("\n", " ")
-tokens = texto.split()
+tokens = preprocesar_texto(texto)
 
 vocab = sorted(set(tokens))
 
-word2idx = {}
-idx2word = {}
-
-for i, w in enumerate(vocab):
-    word2idx[w] = i
-    idx2word[i] = w
+word2idx = {w: i for i, w in enumerate(vocab)}
+idx2word = {i: w for i, w in enumerate(vocab)}
 
 vocab_size = len(vocab)
+print(f"Vocabulario ({vocab_size} palabras):")
 
 # ============================
 # 2. N-GRAMAS
 # ============================
 
-n = 3
+n = 2
 
 X = []
 y = []
@@ -201,7 +191,7 @@ print(f"Similitud coseno promedio (contexto vs target real): {sims_diagonales.me
 # 8. RESUMEN POR UMBRAL DE N-GRAMAS
 # ============================
 
-UMBRAL_NGRAMAS = 200  # hiperparámetro
+UMBRAL_NGRAMAS = 120  # hiperparámetro
 
 # Calcular score de cada n-grama (similitud promedio con todos los contextos)
 scores = cosine_similarity(perfiles_matrix, perfiles_matrix).mean(axis=1)
