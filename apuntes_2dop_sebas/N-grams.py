@@ -12,7 +12,7 @@ def limpiar_texto(texto):
     return texto
 
 
-def obtener_ngramas_caracteres(texto,n):
+def obtener_ngramas_caracteres(texto,n=3):
     texto = limpiar_texto(texto)
     texto = texto.replace(" ", "_")
 
