@@ -56,7 +56,7 @@ def construir_concurrencia(vocab, doc_tokenizado, palabra_a_idx, ventana=2):
         if palabra_actual not in palabra_a_idx:
             i += 1
             continue
-        idx_actual = palabra_a_idx[palabra_actual]
+        idx_actual = palabra_a_idx[palabra_actual] 
 
         inicio = i - ventana
         if inicio < 0:
