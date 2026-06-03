@@ -1,114 +1,92 @@
 # ======================================================
-# A) DETECTOR DE languageS CON N-GRAMAS DE CARACTERES
+# PERFIL DE N-GRAMAS POR PALABRA CON RANKING
+# Entrada: lista de palabras ya preprocesada
 # ======================================================
 
-def clean_text(text):
-    text = text.lower()
-    text = text.replace("\n", " ")
-    return text
+def create_word_ngram_profile(words, n=2, top=200):
+    """
+    Crea un perfil por palabra usando n-gramas de palabras.
 
-def get_char_ngrams(text, n=3):
-    text = clean_text(text)
-    text = text.replace(" ", "_")
+    Entrada:
+        words = ["el", "muchacho", "compró", "pan", "el", "perro"]
 
-    ngrams = []
+    Si n=2:
+        palabra_actual -> palabra_siguiente -> ranking
 
-    for i in range(len(text) - n + 1):
-        ngram = text[i:i+n]
-        ngrams.append(ngram)
+        Ejemplo:
+        {
+            "el": {
+                "muchacho": 0,
+                "perro": 1
+            }
+        }
 
-    return ngrams
+    Si n=3:
+        palabra_actual -> (palabra_siguiente_1, palabra_siguiente_2) -> ranking
+    """
 
+    frequencies_by_word = {}
 
-def ngram_profiles(text, n=3, top=200):
-    ngrams = get_char_ngrams(text, n)
+    for i in range(len(words) - n + 1):
+        current_word = words[i]
+        next_words = words[i+1:i+n]
 
-    frequencies = {}
+        if n == 2:
+            ngram_value = next_words[0]
+        else:
+            ngram_value = tuple(next_words)
 
-    for ng in ngrams:
-        if ng not in frequencies:
-            frequencies[ng] = 0
-        frequencies[ng] += 1
+        if current_word not in frequencies_by_word:
+            frequencies_by_word[current_word] = {}
 
-    sorted_ngrams = sorted(frequencies.items(), key=lambda x: x[1], reverse=True)
+        if ngram_value not in frequencies_by_word[current_word]:
+            frequencies_by_word[current_word][ngram_value] = 0
+
+        frequencies_by_word[current_word][ngram_value] += 1
 
     profile = {}
 
-    for ngram_index, ngram_value in enumerate(sorted_ngrams[:top]):
-        ngram = ngram_value[0]
-        profile[ngram] = ngram_index
+    for word in frequencies_by_word:
+        sorted_values = sorted(
+            frequencies_by_word[word].items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        profile[word] = {}
+
+        for ngram_index, ngram_value in enumerate(sorted_values[:top]):
+            value = ngram_value[0]
+            profile[word][value] = ngram_index
 
     return profile
 
 
-def distance(profile1, profile2):
-    ngrams = set(profile1.keys()) | set(profile2.keys())
+def show_word_ngram_profile(words, n=2, top=200):
+    profile = create_word_ngram_profile(words, n, top)
 
-    penalty = max(len(profile1), len(profile2)) + 1
-
-    total_distance = 0
-
-    for ng in ngrams:
-        r1 = profile1.get(ng, penalty)
-        r2 = profile2.get(ng, penalty)
-
-        total_distance += abs(r1 - r2)
-
-    return total_distance
-
-def create_languages_dict(): 
-    with open('./ngramas/texts/es.txt', 'r', encoding='utf-8') as file1:
-        text_es = file1.read()
-        
-    with open('./ngramas/texts/en.txt', 'r', encoding='utf-8') as file2:
-        text_en = file2.read()
-        
-    with open('./ngramas/texts/fr.txt', 'r', encoding='utf-8') as file3:
-        text_fr = file3.read()
-
-    texts_language = {
-        "spanish": text_es,
-        "english": text_en,
-        "french": text_fr
-    }
-
-    languages_dict = {}
-
-    for language in texts_language:
-        languages_dict[language] = ngram_profiles(texts_language[language])
-    return languages_dict
-
-
-def detect_language(text,languages_dict):
-    print("PHRASE:",text)
-    pf = ngram_profiles(text)
-
-    best_lang = None
-    best_distance = None
-
-    for language in languages_dict:
-        dist = distance(pf, languages_dict[language])
-        
-        print(language,dist)
-
-        if best_distance is None or dist < best_distance:
-            best_distance = dist
-            best_lang = language
-
-    print("LANGUAGE DETECTED ->", str.upper(best_lang))
+    print("WORD N-GRAM PROFILE WITH RANKING:")
     print("")
 
-    return best_lang
+    for word in profile:
+        print(word, ":", profile[word])
 
-test_es = "El muchacho compró zanahorias en el mercado."
-test_en = "The neighbor repaired the wooden chair yesterday."
-test_fr = "La boulangerie vend du pain chaud chaque matin."
+    return profile
 
-languages_dict = create_languages_dict()
 
-detect_language(test_es,languages_dict)
-detect_language(test_en,languages_dict)
-detect_language(test_fr,languages_dict)
+# ======================================================
+# PRUEBA
+# ======================================================
 
-usr_input = input("Type a phrase in EN, ES or FR: ")
-detect_language(usr_input,languages_dict)
+words = [
+    "el", "muchacho", "compró", "pan",
+    "el", "muchacho", "compró", "agua",
+    "el", "perro", "compró", "pan"
+]
+
+with open('./Examen2/corpus.txt', 'r', encoding='utf-8') as file1:
+    text_es = file1.read()
+
+words = text_es.split(" ")
+
+profile = show_word_ngram_profile(words, n=2, top=200)
