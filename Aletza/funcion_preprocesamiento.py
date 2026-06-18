@@ -1,0 +1,401 @@
+import os # para poder leer los documentos
+import string # para código ASCII
+
+def tokenizador6(texto):
+    texto_limpio = ""
+    letras_permitidas = string.ascii_letters + "ñÑáéíóúÁÉÍÓÚ" + " "
+
+    for caracter in texto:
+        if caracter in letras_permitidas:
+            texto_limpio += caracter
+        elif caracter in "\n\t\r":   # ← saltos de línea → espacio
+            texto_limpio += " "
+
+    # considerando mayúsculas y espacios
+    token = ""
+    tokens = []
+
+    for i in range(len(texto_limpio)):
+        caracter = texto_limpio[i]
+        if caracter == ' ':
+            if token != "":
+                tokens = tokens + [token]
+                token = ""
+        else:
+            token += caracter
+
+    if token != "":
+        tokens = tokens + [token]
+
+    return tokens
+
+
+# conversión a minusculas 
+def A_minusculas(texto):
+    return texto.lower()
+
+# Removedor de stopwords general o removedor de stopwords de acuerdo al tema
+def removedor_stop_words(tokenized_text):
+    stop_words = [
+    # 1. Artículos (No aportan significado al sustantivo)
+    "el", "la", "los", "las", "un", "una", "unos", "unas", "al", "del",
+    
+    # 2. Preposiciones de dirección o pertenencia simple
+    "de", "a", "en", "por", "para", "con", "sin", "sobre", "tras", "hasta",
+    
+    # 3. Conjunciones copulativas y disyuntivas (Unen palabras sin añadir contenido)
+    "y", "o", "u", "e", "ni", "que",
+    
+    # 4. Pronombres relativos y reflexivos puros
+    "se", "lo", "le", "les", "me", "te", "nos", "cual", "cuales", "quien",
+    
+    # 5. Adverbios de afirmación vacíos
+    "si", "así", "mismo"
+    ]
+    new_text = []
+    for item in tokenized_text:
+        if item not in stop_words:
+            new_text = new_text + [item]
+    return new_text
+
+def count_words(text):
+    count = 0
+    withes = string.whitespace + '.'
+    a_word = False
+
+    for char in text:
+        if char not in withes :
+            if not a_word:
+                count += 1
+                a_word = True
+        else:
+            a_word = False
+
+    return count
+
+lemmas_excepciones = {
+    "fue":"ser",
+    "fueron":"ser",
+    "soy":"ser",
+    "eres":"ser",
+    "es":"ser",
+    "estaba":"ser",
+    "son":"ser",
+    "malas":"malo",
+    "malos":"malo",
+    "buenas":"bueno",
+    "peliculas":"pelicula",
+    "actuaciones":"actuacion",
+    "tramas":"trama",
+    "mejores":"bueno",
+    "era": "ser",
+    "iba": "ir",
+    "iban": "ir",
+    "tuvo": "tener",
+    "dijo" : "decir",
+    "dijeron" : "decir",
+    "dirán" : "decir",
+    "hizo" : "hacer",
+    "tuvo" : "tener",
+    "árboles" : "árbol",
+    "días" : "día",
+    "era": "ser",
+    "eran": "ser",
+    "habia": "haber",
+    "había": "haber",
+    "vivia": "vivir",
+    "vivía": "vivir",
+    "vivian": "vivir",
+    "vivían": "vivir",
+    "hacia": "hacer",
+    "hacía": "hacer",
+}
+
+diccionario_ar_gerundio = [
+    "hablando", "cantando", "bailando", "saltando", "caminando","mirando", "escuchando", "pensando", "trabajando", "jugando",
+    "estudiando", "viajando", "comprando", "pagando", "usando","tocando", "dibujando", "pintando", "imaginando", "recordando",
+    "olvidando", "buscando", "llevando", "dejando", "guardando","explicando", "preguntando", "contestando", "cuidando", "ayudando",
+    "intentando", "probando", "creando", "deseando", "esperando","logrando", "empezando", "terminando", "cambiando", "mejorando",
+    "organizando", "planeando", "preparando", "presentando", "analizando","observando", "comparando", "señalando", "marcando", "considerando"
+]
+
+diccionario_ir_gerundio = [
+    "viviendo","escribiendo","recibiendo","abriendo","permitiendo","admitiendo","asistiendo","dividiendo","decidiendo","repitiendo",
+    "exigiendo","corrigiendo","dirigiendo","eligiendo","siguiendo","persiguiendo","consiguiendo","prohibiendo","imprimiendo","suprimiendo",
+    "comprimiendo","expandiendo","confundiendo","difundiendo","fundiendo","hundiendo","interrumpiendo","cumpliendo","descubriendo","cubriendo",
+    "inscribiendo","describiendo","suscribiendo","reescribiendo","proscribiendo","incluyendo","concluyendo","excluyendo","atribuyendo","distribuyendo",
+    "retribuyendo","construyendo","destruyendo","instruyendo","sustituyendo","instituyendo","constituyendo","restituyendo","destituyendo","intuyendo","caminando"] #Verbos en infinitivo con termicación ir conjugados en gerundio
+
+diccionario_er_gerundio = [
+    "comiendo", "bebiendo", "leyendo", "corriendo", "temiendo","vendiendo", "aprendiendo", "entendiendo", "dependiendo", "sorbiendo",
+    "mordiendo", "rompiendo", "respondiendo", "perdiendo", "volviendo","resolviendo", "envolviendo", "moviendo", "removiendo", "devolviendo",
+    "cociendo", "torciendo", "retorciendo", "creciendo", "ofreciendo","mereciendo", "obedeciendo", "pareciendo", "estableciendo", "perteneciendo",
+    "agradeciendo", "desapareciendo", "conociendo", "reconociendo", "traduciendo","produciendo", "reduciendo", "conduciendo", "introduciendo", "deduciendo",
+    "seduciendo", "bendiciendo", "convenciendo", "venciendo", "defendiendo","encendiendo", "tendiendo", "extendiendo", "suspendiendo", "pretendiendo"
+]
+
+diccionario_ar_preterito = [
+    "hablé", "hablaste", "habló", "hablamos", "hablaron",
+    "canté", "cantaste", "cantó", "cantamos", "cantaron",
+    "bailé", "bailaste", "bailó", "bailamos", "bailaron",
+    "caminé", "caminaste", "caminó", "caminamos", "caminaron",
+    "salté", "saltaste", "saltó", "saltamos", "saltaron",
+    "miré", "miraste", "miró", "miramos", "miraron",
+    "escuché", "escuchaste", "escuchó", "escuchamos", "escucharon",
+    "trabajé", "trabajaste", "trabajó", "trabajamos", "trabajaron",
+    "jugué", "jugaste", "jugó", "jugamos", "jugaron",
+    "estudié", "estudiaste", "estudió", "estudiamos", "estudiaron",
+    "viajé", "viajaste", "viajó", "viajamos", "viajaron",
+    "compré", "compraste", "compró", "compramos", "compraron",
+    "pagué", "pagaste", "pagó", "pagamos", "pagaron",
+    "usé", "usaste", "usó", "usamos", "usaron",
+    "toqué", "tocaste", "tocó", "tocamos", "tocaron",
+    "dibujé", "dibujaste", "dibujó", "dibujamos", "dibujaron",
+    "pinté", "pintaste", "pintó", "pintamos", "pintaron",
+    "olvidé", "olvidaste", "olvidó", "olvidamos", "olvidaron",
+    "busqué", "buscaste", "buscó", "buscamos", "buscaron",
+    "ayudé", "ayudaste", "ayudó", "ayudamos", "ayudaron",
+    "comencé", "comenzaste", "comenzó", "comenzamos", "comenzaron",
+    "trabajé","trabajaste", "trabajó", "trabajamos", "trabajaron",
+    "expliqué", "explicaste", "explicó", "explicamos", "explicaron",
+    "cambié", "cambiaste", "cambió", "cambiamos", "cambiaron",
+    "regresé", "regresaste", "regresó", "regresamos", "regresaron",
+    "practiqué", "practicaste", "practicó", "practicamos", "practicaron",
+    "preparé", "preparaste", "preparó", "preparamos", "prepararon",
+    "organicé", "organizaste", "organizó", "organizamos", "organizaron",
+    "terminé", "terminaste", "terminó", "terminamos", "terminaron",
+    "mejoré", "mejoraste", "mejoró", "mejoramos", "mejoraron",
+    "recordé", "recordaste", "recordó", "recordamos", "recordaron",
+    "imaginé", "imaginaste", "imaginó", "imaginamos", "imaginaron",
+    "pensé", "pensaste", "pensó", "pensamos", "pensaron"
+]
+
+diccionario_er_preterito = [
+    "comí", "comiste", "comió", "comimos", "comieron",
+    "bebí", "bebiste", "bebió", "bebimos", "bebieron",
+    "corrí", "corriste", "corrió", "corrimos", "corrieron",
+    "leí", "leíste", "leyó", "leímos", "leyeron",
+    "temí", "temiste", "temió", "temimos", "temieron",
+    "vendí", "vendiste", "vendió", "vendimos", "vendieron",
+    "aprendí", "aprendiste", "aprendió", "aprendimos", "aprendieron",
+    "entendí", "entendiste", "entendió", "entendimos", "entendieron",
+    "dependí", "dependiste", "dependió", "dependimos", "dependieron",
+    "sorbí", "sorbiste", "sorbió", "sorbimos", "sorbieron",
+    "mordí", "mordiste", "mordió", "mordimos", "mordieron",
+    "rompí", "rompiste", "rompió", "rompimos", "rompieron",
+    "respondí", "respondiste", "respondió", "respondimos", "respondieron",
+    "perdí", "perdiste", "perdió", "perdimos", "perdieron",
+    "volví", "volviste", "volvió", "volvimos", "volvieron",
+    "resolví", "resolviste", "resolvió", "resolvimos", "resolvieron",
+    "moví", "moviste", "movió", "movimos", "movieron",
+    "devolví", "devolviste", "devolvió", "devolvimos", "devolvieron",
+    "torcí", "torciste", "torció", "torcimos", "torcieron",
+    "ofrecí", "ofreciste", "ofreció", "ofrecimos", "ofrecieron",
+    "respondí", "respondiste", "respondió", "respondimos", "respondieron",
+    "nací", "naciste", "nació", "nacimos", "nacieron"
+]
+
+diccionario_ir_preterito = [
+    "viví", "viviste", "vivió", "vivimos", "vivieron",
+    "escribí", "escribiste", "escribió", "escribimos", "escribieron",
+    "recibí", "recibiste", "recibió", "recibimos", "recibieron",
+    "abrí", "abriste", "abrió", "abrimos", "abrieron",
+    "permití", "permitiste", "permitió", "permitimos", "permitieron",
+    "admití", "admitiste", "admitió", "admitimos", "admitieron",
+    "asistí", "asististe", "asistió", "asistimos", "asistieron",
+    "dividí", "dividiste", "dividió", "dividimos", "dividieron",
+    "decidí", "decidiste", "decidió", "decidimos", "decidieron",
+    "repetí", "repetiste", "repitió", "repetimos", "repitieron",
+    "exigí", "exigiste", "exigió", "exigimos", "exigieron",
+    "corrigí", "corregiste", "corrigió", "corregimos", "corrigieron",
+    "dirigí", "dirigiste", "dirigió", "dirigimos", "dirigieron",
+    "elegí", "elegiste", "eligió", "elegimos", "eligieron",
+    "seguí", "seguiste", "siguió", "seguimos", "siguieron","seguía",
+    "persiguí", "perseguiste", "persiguió", "perseguimos", "persiguieron",
+    "conseguí", "conseguiste", "consiguió", "conseguimos", "consiguieron",
+    "prohibí", "prohibiste", "prohibió", "prohibimos", "prohibieron",
+    "imprimí", "imprimiste", "imprimió", "imprimimos", "imprimieron",
+    "descubrí", "descubriste", "descubrió", "descubrimos", "descubrieron",
+]
+
+diccionario_ar_futuro = [
+"hablaré","hablarás","hablará","hablaremos","hablarán",
+"cantaré","cantarás","cantará","cantaremos","cantarán",
+"bailaré","bailarás","bailará","bailaremos","bailarán",
+"caminaré","caminarás","caminará","caminaremos","caminarán",
+"saltaré","saltarás","saltará","saltaremos","saltarán",
+"miraré","mirarás","mirará","miraremos","mirarán",
+"escucharé","escucharás","escuchará","escucharemos","escucharán",
+"trabajaré","trabajarás","trabajará","trabajaremos","trabajarán",
+"jugaré","jugarás","jugará","jugaremos","jugarán",
+"estudiaré","estudiarás","estudiará","estudiaremos","estudiarán",
+"viajaré","viajarás","viajará","viajaremos","viajarán",
+"compraré","comprarás","comprará","compraremos","comprarán",
+"pagaré","pagarás","pagará","pagaremos","pagarán",
+"usaré","usarás","usará","usaremos","usarán",
+"tocaré","tocarás","tocará","tocaremos","tocarán",
+"dibujaré","dibujarás","dibujará","dibujaremos","dibujarán",
+"pintaré","pintarás","pintará","pintaremos","pintarán",
+"buscaré","buscarás","buscará","buscaremos","buscarán",
+"ayudaré","ayudarás","ayudará","ayudaremos","ayudarán",
+"intentaré","intentarás","intentará","intentaremos","intentarán"
+]
+
+diccionario_er_futuro = [
+"comeré","comerás","comerá","comeremos","comerán",
+"beberé","beberás","beberá","beberemos","beberán",
+"correré","correrás","correrá","correremos","correrán",
+"leeré","leerás","leerá","leeremos","leerán",
+"temeré","temerás","temerá","temeremos","temerán",
+"venderé","venderás","venderá","venderemos","venderán",
+"aprenderé","aprenderás","aprenderá","aprenderemos","aprenderán",
+"entenderé","entenderás","entenderá","entenderemos","entenderán",
+"dependeré","dependerás","dependerá","dependeremos","dependerán",
+"morderé","morderás","morderá","morderemos","morderán",
+"romperé","romperás","romperá","romperemos","romperán",
+"responderé","responderás","responderá","responderemos","responderán",
+"perderé","perderás","perderá","perderemos","perderán",
+"volveré","volverás","volverá","volveremos","volverán",
+"resolveré","resolverás","resolverá","resolveremos","resolverán",
+"moveré","moverás","moverá","moveremos","moverán",
+"devolveré","devolverás","devolverá","devolveremos","devolverán",
+"torceré","torcerás","torcerá","torceremos","torcerán",
+"ofreceré","ofrecerás","ofrecerá","ofreceremos","ofrecerán",
+"temeré","temerás","temerá","temeremos","temerán"
+]
+
+diccionario_ir_futuro = [
+"viviré","vivirás","vivirá","viviremos","vivirán",
+"escribiré","escribirás","escribirá","escribiremos","escribirán",
+"recibiré","recibirás","recibirá","recibiremos","recibirán",
+"abriré","abrirás","abrirá","abriremos","abrirán",
+"permitiré","permitirás","permitirá","permitiremos","permitirán",
+"admitiré","admitirás","admitirá","admitiremos","admitirán",
+"asistiré","asistirás","asistirá","asistiremos","asistirán",
+"dividiré","dividirás","dividirá","dividiremos","dividirán",
+"decidiré","decidirás","decidirá","decidiremos","decidirán",
+"repetiré","repetirás","repetirá","repetiremos","repetirán",
+"exigiré","exigirás","exigirá","exigiremos","exigirán",
+"corregiré","corregirás","corregirá","corregiremos","corregirán",
+"dirigiré","dirigirás","dirigirá","dirigiremos","dirigirán",
+"elegiré","elegirás","elegirá","elegiremos","elegirán",
+"seguiré","seguirás","seguirá","seguiremos","seguirán",
+"perseguiré","perseguirás","perseguirá","perseguiremos","perseguirán",
+"conseguiré","conseguirás","conseguirá","conseguiremos","conseguirán",
+"prohibiré","prohibirás","prohibirá","prohibiremos","prohibirán",
+"imprimiré","imprimirás","imprimirá","imprimiremos","imprimirán",
+"descubriré","descubrirás","descubrirá","descubriremos","descubrirán"
+]
+
+def grammar_rules(word):
+    n = len(word)
+    
+    if word[n-4:] == "ando" and word in diccionario_ar_gerundio:
+        return word[:n-4] + "ar"
+    if word[n-5:] == "iendo" and word in diccionario_ir_gerundio:
+        return word[:n-5] + "ir"
+    if word[n-5:] == "iendo" and word in diccionario_er_gerundio:
+        return word[:n-5] + "er"
+
+    # Pasado -ar
+    if word[n-1:] == "é" and word in diccionario_ar_preterito:
+        return word[:n-1] + "ar"
+    if word[n-4:] == "aste" and word in diccionario_ar_preterito:
+        return word[:n-4] + "ar"
+    if word[n-1:] == "ó" and word in diccionario_ar_preterito:
+        return word[:n-1] + "ar"
+    if word[n-4:] == "amos" and word in diccionario_ar_preterito:
+        return word[:n-4] + "ar"
+    if word[n-4:] == "aron" and word in diccionario_ar_preterito:
+        return word[:n-4] + "ar"
+
+    # Pasado -er
+    if word[n-1:] == "í" and word in diccionario_er_preterito:
+        return word[:n-1] + "er"
+    if word[n-2:] == "ía" and word in diccionario_er_preterito:
+        return word[:n-2] + "er"
+    if word[n-4:] == "iste" and word in diccionario_er_preterito:
+        return word[:n-4] + "er"
+    if word[n-2:] == "ió" and word in diccionario_er_preterito:
+        return word[:n-2] + "er"
+    if word[n-4:] == "imos" and word in diccionario_er_preterito:
+        return word[:n-4] + "er"
+    if word[n-5:] == "ieron" and word in diccionario_er_preterito:
+        return word[:n-5] + "er"
+
+    # Pasado -ir
+    if word[n-1:] == "í" and word in diccionario_ir_preterito:
+        return word[:n-1] + "ir"
+    if word[n-2:] == "ía" and word in diccionario_ir_preterito:
+        return word[:n-2] + "ir"
+    if word[n-4:] == "iste" and word in diccionario_ir_preterito:
+        return word[:n-4] + "ir"
+    if word[n-2:] == "ió" and word in diccionario_ir_preterito:
+        return word[:n-2] + "ir"
+    if word[n-4:] == "imos" and word in diccionario_ir_preterito:
+        return word[:n-4] + "ir"
+    if word[n-5:] == "ieron" and word in diccionario_ir_preterito:
+        return word[:n-5] + "ir"
+
+    # Futuro -ar
+    if word[-1:] == "é" and word in diccionario_ar_futuro:
+        return word[:-1]
+    if word[-2:] == "ás" and word in diccionario_ar_futuro:
+        return word[:-2]
+    if word[-1:] == "á" and word in diccionario_ar_futuro:
+        return word[:-1]
+    if word[-4:] == "emos" and word in diccionario_ar_futuro:
+        return word[:-4]
+    if word[-2:] == "án" and word in diccionario_ar_futuro:
+        return word[:-2]
+
+    # Futuro -er
+    if word[-1:] == "é" and word in diccionario_er_futuro:
+        return word[:-1]
+    if word[-2:] == "ás" and word in diccionario_er_futuro:
+        return word[:-2]
+    if word[-1:] == "á" and word in diccionario_er_futuro:
+        return word[:-1]
+    if word[-4:] == "emos" and word in diccionario_er_futuro:
+        return word[:-4]
+    if word[-2:] == "án" and word in diccionario_er_futuro:
+        return word[:-2]
+
+    # Futuro -ir
+    if word[-1:] == "é" and word in diccionario_ir_futuro:
+        return word[:-1]
+    if word[-2:] == "ás" and word in diccionario_ir_futuro:
+        return word[:-2]
+    if word[-1:] == "á" and word in diccionario_ir_futuro:
+        return word[:-1]
+    if word[-4:] == "emos" and word in diccionario_ir_futuro:
+        return word[:-4]
+    if word[-2:] == "án" and word in diccionario_ir_futuro:
+        return word[:-2]
+    
+
+def lematizador1(corpus):
+    lematized_words = []
+    for word in corpus:
+        lematized_word = grammar_rules(word)
+        if lematized_word == None and word in lemmas_excepciones:
+            lematized_word = lemmas_excepciones[word]
+        elif lematized_word == None and word not in lemmas_excepciones:
+            lematized_word = word
+        lematized_words += [lematized_word]
+    return lematized_words
+
+def preprocesar_texto(texto):
+    # 1. minúsculas
+    texto = A_minusculas(texto)
+    
+    # 2. tokenización + limpieza
+    tokens = tokenizador6(texto)
+    
+    # 3. stopwords
+    tokens = removedor_stop_words(tokens)
+    
+    # 4. lematización
+    tokens = lematizador1(tokens)
+    
+    return tokens
